@@ -1,0 +1,41 @@
+<div class="scoreboardReport">
+    <ul>
+        <li>
+            <h3>Ticket age</h3>
+            <p><?= ($form_model->ticket_age) ?></p>
+        </li>
+        <li>
+            <h3>Status</h3>
+            <p>
+                <?= $form_model->status->name ?>
+            </p>
+        </li>
+        <li>
+            <h3>Priority</h3>
+            <p>
+                <?= $form_model->priority->name ?>
+            </p>
+        </li>               
+        <li>
+            <h3>Assigned to</h3>
+            <p><?= ($form_model->user) ? $form_model->user->name : 'Nobody' ?></p>
+            <p class="description">
+            </p>
+        </li>
+        <? if ($form_model->updated_at): ?>
+            <li class="last">
+                <h3>Last update by</h3>
+                <p><?= h($form_model->updated_user_name) ?></p>
+                <p class="description">
+                    <?= ($form_model->ticket_update_age) ?> ago
+                </p>
+            </li>
+        <? else: ?>
+            <li class="last">
+                <h3>Last update by</h3>
+                <p>Nobody</p>
+            </li>
+        <? endif ?>             
+    </ul>
+    <div class="clear"></div>
+</div>

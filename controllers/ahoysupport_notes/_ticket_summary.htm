@@ -1,0 +1,38 @@
+<div class="info-header">
+    <p>Support Ticket</p>
+    <h3><?= $ticket->title ? h($ticket->title) : 'No title' ?></h3>
+</div>
+
+<div class="info-area">
+    <table class="name-value-report title-width-80">
+        <tr>
+            <th>Status</th>
+            <td><?= $ticket->is_published ? $ticket->displayField('published_date') : 'No' ?></td>
+        </tr>
+        <tr>
+            <th>Categories</th>
+            <td>
+                <?
+                    $categories = $ticket->displayField('categories');
+                    if ($categories):
+                ?>
+                    <?= h($categories) ?>
+                <? else: ?>
+                    -
+                <? endif ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Last update</th>
+            <td>
+                <? if ($ticket->updated_at): ?>
+                    <?= $ticket->displayField('updated_at') ?> by <?= h($ticket->updated_user_name) ?>
+                <? elseif ($ticket->created_user_name): ?>
+                    <?= $ticket->displayField('created_at') ?> by <?= h($ticket->created_user_name) ?></td>
+                <? else: ?>
+                    -
+                <? endif ?>
+            </td>
+        </tr>
+    </table>
+</div>

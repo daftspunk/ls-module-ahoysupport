@@ -1,0 +1,52 @@
+<h2>Recent Support Tickets</h2>
+
+<? 
+    $tickets = AhoySupport_Ticket::create();
+    $tickets->order('created_at desc');
+    $tickets->limit(5);
+    $tickets = $tickets->find_all();
+
+    $total = 0;
+    
+    $tickets_found = $tickets->count;
+?>
+
+<table class="simpleList">
+    <thead>
+        <tr>
+            <th class="iconCell"></th>
+            <th>Status</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th class="last current date">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? if (!$tickets_found): ?>
+            <tr class="noData"><td colspan="5">&lt;no tickets found&gt;</td></tr>
+        <? else: ?>
+            <? foreach ($tickets as $index=>$ticket): 
+                $url = url('ahoysupport/tickets/preview/'.$ticket->id.'?'.uniqid());
+            ?>
+                <tr class="<?= Backend_Html::zebra('support_tickets') ?> <?= $index == $tickets->count-1 ? 'last' : null ?>">
+                    <td class="iconCell">
+                        <? if ($ticket->priority && $ticket->is_updated): ?>
+                            <img src="modules/ahoysupport/assets/images/<?=$ticket->priority->code?>.png" alt="Priority: <?=$ticket->priority->name?>" title="Priority: <?=$ticket->priority->name?>" width="16" height="16"/>
+                        <? endif ?>
+                    </td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= $ticket->status->name ?></a></td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= h(Phpr_Html::strTrim($ticket->displayField('title'), 50)) ?></a></td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= strlen($ticket->author_name) ? h(Phpr_Html::strTrim($ticket->displayField('author_name'), 20)) : h('<not specified>') ?></a></td>
+                    <td class="last link current date" <?= click_link($url) ?>><a href="<?= $url ?>"><?= $ticket->created_at->format('%x') ?></a></td>
+                </tr>
+            <? endforeach ?>
+        <? endif ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" class="last">
+                <a href="<?= url('/ahoysupport/tickets') ?>">Open support ticket list</a>
+            </td>
+        </tr>
+    </tfoot>
+</table>

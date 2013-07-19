@@ -1,0 +1,39 @@
+<div>
+    <h2>Select Message Template</h2>
+    <div class="content">
+        <div class="form400">
+            <? if (!isset($fatalError)): ?>
+                <?= Phpr_Form::openTag(array('id'=>$this->listGetFormId())) ?>
+
+                    <div class="scrollableList thickBorder">
+                        <ul class="selectable_list">
+                        <? 
+                            $last_index = count($templates)-1;
+                            foreach ($templates as $index=>$template): 
+                                $url = url('/ahoysupport/notes/create/template/'.$ticket_id.'/'.$template->id);
+                        ?>
+                            <li <? if ($index == $last_index): ?>class="last"<? endif ?>>
+                                <a href="<?= $url ?>">
+                                    <span class="title"><?= h($template->code) ?></span>
+                                    <? if (strlen($template->description)): ?>
+                                        <span class="description">
+                                            <?= h($template->description) ?>
+                                        </span>
+                                    <? endif ?>
+                                </a>
+                            </li>
+                        <? endforeach ?>
+                        </ul>
+                    </div>
+
+                    <?= backend_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
+                    <div class="clear"></div>
+                </form>
+            <? else: ?>
+                <?= flash() ?>
+                <?= backend_button('Cancel', array('onclick'=>'return cancelPopup()')) ?>
+                <div class="clear"></div>
+            <? endif ?>
+        </div>
+    </div>
+</div>

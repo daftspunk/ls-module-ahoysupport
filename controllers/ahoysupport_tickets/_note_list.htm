@@ -1,0 +1,45 @@
+<? 
+	$notes = AhoySupport_Ticket_Note::create()->where('ticket_id=?',$ticket_id)->order('created_at desc')->find_all();
+?>
+<div class="note_list_container">
+    <? foreach ($notes as $note): $note->define_form_fields(); ?>
+    <?
+        $link = ($note->customer_id) ? url('shop/customers/preview/'.$note->customer_id) : "mailto:".$note->author_email;
+    ?>
+        <div class="toolbar">
+            <h4>Updated by <a href="<?=$link?>"><?=$note->author_name?></a> <?=Phpr_DateTime::now()->substractDateTime($note->created_at)->intervalAsString()?> ago</h4>
+            <div class="separator"></div>
+            <?= backend_ctr_button('Edit message', 'edit_message', array('href'=>url('/ahoysupport/notes/edit/'.$note->id.'/'.$note->ticket_id).'?'.uniqid(), 'class'=>'') ) ?>
+            <div class="clear"></div>
+        </div>
+
+        <? if ($note->status_id||$note->priority_id||$note->assign_user_id): ?>
+            <ul class="note_changes">
+            <? if ($note->status_id): ?><li><strong>Status</strong> changed to <em><?=$note->status->name?></em></li><? endif ?>
+            <? if ($note->priority_id): ?><li><strong>Priority</strong> changed to <em><?=$note->priority->name?></em></li><? endif ?>
+            <? if ($note->assign_user_id): ?><li><strong>Asignee</strong> set to <em><?=$note->assign_user->name?></em></li><? endif ?>
+            </ul>
+        <? endif ?>
+
+        <? if ($note->description): ?>
+            <div class="description"><?=$note->description?></div>
+        <? endif ?>
+
+        <? if ($note->private_note): ?>
+            <div class="private_note">
+                <h4>Private Note</h4>
+                <?=Phpr_Html::paragraphize($note->private_note)?>
+            </div>
+        <? endif ?>
+
+
+        <? if ($note->files->count): ?>
+            <h4>Attachments</h4>
+            <div class="attachments">
+                <?=$this->formRenderPartial('form_file_list', array('form_model'=>$note, 'form_field'=>$note->find_form_field('files'), 'dbName'=>'files', 'form_file_list'=>$note->files))?>
+            </div>
+        <? endif ?>
+
+        <div class="clear"></div>
+    <? endforeach ?>
+</div>

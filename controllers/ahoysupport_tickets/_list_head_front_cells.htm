@@ -1,0 +1,9 @@
+<th class="iconCell">
+    <a href="#" onclick="return $(this).getForm().sendPhpr('index_onListColumnClick', {
+        extraFields: {columnName: 'is_updated'}, 
+        update: 'listAhoySupport_Tickets_index_list', 
+        loadIndicator: {show: false}, 
+        onBeforePost: LightLoadingIndicator.show.pass('Loading...'), 
+        onComplete: LightLoadingIndicator.hide, 
+        onSuccess: function(){$('listAhoySupport_Tickets_index_list').fireEvent('listUpdated')}});">&nbsp;</a>
+</th>

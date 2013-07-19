@@ -1,0 +1,16 @@
+#1 First version
+#2 Add email templates
+#3 Add credit system, add setting to include attachments to emails, add actions for editing
+#4 Add ability to download files on front end
+#5 Fix bug in permissions, Add events to extend Note and Ticket models
+#6 Made the backend much easier to use, added Quick Post and Post of behalf of customer
+#7 More interface improvements, added unique hash to ticket table
+#8 Add open tickets dashboard widget, add is updated flag
+#9 Fix minor bugs
+#10 Efficiency improvements
+#11 Fixes bug in SQL scripts
+#12 New features: ticket list shown on customer page, update ticket using email template, other various improvements
+#13 Fixes bug with customer update notification not firing, add new email templates (ticket expired and closed)
+#14 Add the ability to Flag/Unflag tickets
+#15 Minor improvements
+#16 Minor improvements

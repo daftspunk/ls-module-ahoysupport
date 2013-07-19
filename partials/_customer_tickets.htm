@@ -1,0 +1,32 @@
+<table class="simpleList">
+    <thead>
+        <tr>
+            <th class="iconCell"></th>
+            <th>Status</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th class="last current date">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <? if (!$form_model->tickets->count): ?>
+            <tr class="noData"><td colspan="5">&lt;no tickets found&gt;</td></tr>
+        <? else: ?>
+            <? foreach ($form_model->tickets as $index=>$ticket): 
+                $url = url('ahoysupport/tickets/preview/'.$ticket->id.'?'.uniqid());
+            ?>
+                <tr class="<?= Backend_Html::zebra('support_tickets') ?> <?= $index == $form_model->tickets->count-1 ? 'last' : null ?>">
+                    <td class="iconCell">
+                        <? if ($ticket->priority && $ticket->is_updated): ?>
+                            <img src="modules/ahoysupport/assets/images/<?=$ticket->priority->code?>.png" alt="Priority: <?=$ticket->priority->name?>" title="Priority: <?=$ticket->priority->name?>" width="16" height="16"/>
+                        <? endif ?>
+                    </td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= $ticket->status->name ?></a></td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= h(Phpr_Html::strTrim($ticket->displayField('title'), 100)) ?></a></td>
+                    <td class="link" <?= click_link($url) ?>><a href="<?= $url ?>"><?= strlen($ticket->author_name) ? h(Phpr_Html::strTrim($ticket->displayField('author_name'), 50)) : h('<not specified>') ?></a></td>
+                    <td class="last link current date" <?= click_link($url) ?>><a href="<?= $url ?>"><?= $ticket->created_at->format('%x') ?></a></td>
+                </tr>
+            <? endforeach ?>
+        <? endif ?>
+    </tbody>
+</table>

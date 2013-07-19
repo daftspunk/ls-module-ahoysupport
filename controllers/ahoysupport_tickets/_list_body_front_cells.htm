@@ -1,0 +1,21 @@
+<td class="iconCell">
+	<? if ($model->priority && $model->is_updated): ?>
+		<img src="modules/ahoysupport/assets/images/<?=$model->priority->code?>.png" alt="Priority: <?=$model->priority->name?>" title="Priority: <?=$model->priority->name?>" width="16" height="16"/>
+	<? endif ?>
+
+	<div class="row_controls hidden">
+		<div class="content">
+			<ul>
+				<li class="default">
+					<a href="<?= $url.'?'.uniqid() ?>">View Ticket</a>
+					<div class="handle"></div>
+				</li>
+				<? if ($model->status_code != AhoySupport_Ticket_Status::status_closed): ?>
+					<li class="icon_edit"><a href="<?= url('/ahoysupport/notes/create/0/'.$model->id).'?'.uniqid() ?>">Add new note</a></li>
+					<li class="icon_edit"><a href="<?= url('/ahoysupport/notes/create/customer/'.$model->id).'?'.uniqid() ?>">Add note from customer</a></li>
+				<? endif ?>
+			</ul>
+			<div class="clear"></div>
+		</div>
+	</div>
+</td>

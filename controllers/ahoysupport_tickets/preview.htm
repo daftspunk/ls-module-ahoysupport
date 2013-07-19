@@ -1,0 +1,98 @@
+<? Phpr_View::beginBlock("head") ?>
+	<script type="text/javascript" src="modules/ahoysupport/assets/javascript/preview.js"></script>
+	<link rel="stylesheet" href="modules/ahoysupport/assets/css/ticket.css" type="text/css"/>
+<? Phpr_View::endBlock() ?>
+
+<? Phpr_View::beginBlock("view") ?>
+	<ul class="breadcrumbs">
+		<li><a href="<?= url('/ahoysupport/tickets') ?>">Support Tickets</a></li>
+		<li><?= $this->app_page_title ?></li>
+	</ul>
+
+	<? if (!isset($fatalError)): ?>
+		<div id="ticket_scoreboard"><?=$this->renderPartial('ticket_scoreboard')?></div>
+		<div>
+			<div class="toolbar">
+				<?= backend_ctr_button('Return to the ticket list', 'go_back', url('/ahoysupport/tickets')) ?>
+				<div class="separator"></div>
+				<?= backend_ctr_button('Edit ticket', 'edit_document', array('href'=>url('/ahoysupport/tickets/edit/'.$form_model->id).'?'.uniqid(), 'class'=>'')) ?>
+				
+				<div class="separator"></div>
+				<? if ($form_model->is_updated): ?>
+					<?= backend_ctr_button('Unflag ticket', 'unflag', array('href'=>url('/ahoysupport/tickets/flag/'.$form_model->id).'1?'.uniqid(), 'class'=>'')) ?>
+				<? else: ?>
+					<?= backend_ctr_button('Flag ticket', 'flag', array('href'=>url('/ahoysupport/tickets/flag/'.$form_model->id).'?'.uniqid(), 'class'=>'')) ?>
+				<? endif ?>
+
+				<? if ($form_model->status_code != AhoySupport_Ticket_Status::status_closed): ?>
+					<div class="separator"></div>
+					<?= backend_ctr_button('Close ticket', 'close_ticket', array('onclick'=>"return confirm('Are you sure you want to CLOSE this ticket? The customer will be notified')", 'href'=>url('/ahoysupport/tickets/close/'.$form_model->id), 'class'=>'')) ?>
+				<? endif ?>
+			    <div class="clear"></div>
+			</div>
+		</div>
+		<div>
+			<?= Phpr_Form::openTag(array('id'=>'form_element')) ?>
+				<h2 class="separated"><?=$form_model->category_string?>: <?=$form_model->title?> (#<?=$form_model->id?>)</h2>
+				<? $this->formRenderPreview() ?>
+			</form>
+
+			<div class="note_list_container">
+				<div class="description"><?=$form_model->description?></div>
+		        <? if ($form_model->files->count): ?>
+		            <h4>Attachments</h4>
+		            <div class="attachments">
+		                <?=$this->formRenderPartial('form_file_list', array('form_model'=>$form_model, 'dbName'=>'files', 'form_file_list'=>$form_model->files))?>
+		            </div>
+		        <? endif ?>
+		        <? if ($form_model->private_note): ?>
+		            <div class="private_note">
+		                <h4>Private Note</h4>
+		                <?=Phpr_Html::paragraphize($form_model->private_note)?>
+		            </div>
+		        <? endif ?>		        
+		    </div>
+
+			<? if ($form_model->status_code != AhoySupport_Ticket_Status::status_closed): ?>
+				<br />
+				<?= Phpr_Form::openTag(array('id'=>'form_element_note', 'action'=> url('ahoysupport/tickets/preview/25') )) ?>
+
+					<div class="toolbar">
+						<?= backend_ctr_button('Quick post', 'new_message_quick', array('href'=>url('/ahoysupport/notes/create/'.$form_model->id), 'class'=>'', 'onclick'=>"
+							return $(this).getForm().sendPhpr('preview_onAddNewNote', { 
+								extraFields: {ticket_id: '".$form_model->id."'}, update: 'ticket_add_note', loadIndicator: {show: false}
+							});
+						")) ?>
+						<div class="separator"></div>
+						<?= backend_ctr_button('Assign ticket', 'manufacturer', array('href'=>url('/ahoysupport/tickets/edit/'.$form_model->id), 'class'=>'', 'onclick'=>"
+							return $(this).getForm().sendPhpr('preview_onAddNewNote', { 
+								extraFields: {ticket_id: '".$form_model->id."', open_context: 'assign'}, update: 'ticket_add_note', loadIndicator: {show: false}
+							});
+						")) ?>						
+						<div class="separator"></div>
+						<?= backend_ctr_button('New message', 'new_message', array('href'=>url('/ahoysupport/notes/create/0/'.$form_model->id), 'class'=>'')) ?>
+						<?= backend_ctr_button('New from template', 'new_from_template', array('href'=>url('/ahoysupport/notes/create/0/'.$form_model->id), 'class'=>'', 'onclick'=>"
+							new PopupForm('preview_onLoadNoteTemplateForm'); return false;
+						")) ?>
+						<div class="separator"></div>
+						<?= backend_ctr_button('Update on behalf of customer', 'user_message', array('href'=>url('/ahoysupport/notes/create/customer/'.$form_model->id), 'class'=>'')) ?>
+					<div class="clear"></div>
+					</div>
+					<div id="ticket_add_note"></div>
+				</form>
+				<div class="clear"></div>
+			<? else: ?>
+				<p class="error" style="text-align:center"><strong>Ticket is closed and cannot be updated, you may <a href="<?=url('/ahoysupport/tickets/edit/'.$form_model->id).'?'.uniqid()?>">reopen it by updating the ticket status</a></strong></p>
+				<div class="clear"></div>
+			<? endif ?>
+
+			<h2 class="offsetTop separated" id="comments">Update History</h2>
+			<div id="note_list"><? $this->renderPartial('note_list', array('ticket_id'=>$form_model->id)) ?></div>
+
+		</div>
+	<? else: ?>
+		<?= flash() ?>
+
+		<p><a href="<?= url('/ahoysupport/tickets') ?>">Return to the post list</a></p>
+	<? endif ?>
+<? Phpr_View::endBlock() ?>

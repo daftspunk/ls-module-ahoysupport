@@ -1,0 +1,24 @@
+<? Phpr_View::beginBlock("view") ?>
+    <? if (!isset($fatalError)): ?>
+        <ul class="breadcrumbs">
+            <li><a href="<?= url('/ahoysupport/tickets') ?>">Support Tickets</a></li>
+            <li><a href="<?= url('/ahoysupport/tickets/preview/'.$form_model->ticket_id) ?>">Ticket</a></li>
+            <li><?= $this->app_page_title ?></li>
+        </ul>
+
+        <div class="form600">
+            <?= Phpr_Form::openTag(array('id'=>'form_element')) ?>
+                <? $this->formRenderPreview() ?>
+
+                <?= backend_button('Return to the ticket', url('/ahoysupport/tickets/preview/'.$form_model->ticket_id.'?'.uniqid())) ?>
+                <?= backend_button('Edit Note', array('href'=>url('/ahoysupport/notes/edit/'.$form_model->id.'/'.$form_model->ticket_id.'/?'.uniqid()), 'class'=>'right')) ?>
+
+                <div class="clear"></div>
+            </form>
+        </div>
+    <? else: ?>
+        <?= flash() ?>
+
+        <p><a href="<?= url('/ahoysupport/tickets') ?>">Return to the post list</a></p>
+    <? endif ?>
+<? Phpr_View::endBlock() ?>

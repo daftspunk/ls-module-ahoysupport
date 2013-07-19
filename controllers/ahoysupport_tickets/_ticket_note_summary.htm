@@ -1,0 +1,19 @@
+<div id="note_list">
+
+    <div class="note_list_container">
+        <div class="toolbar">
+            <h4>Original description by <a href="mailto:<?=$ticket->author_email?>"><?=$ticket->author_name?></a> <?=Phpr_DateTime::now()->substractDateTime($ticket->created_at)->intervalAsString()?> ago</h4>
+            <div class="clear"></div>
+        </div>    
+        <div class="description"><?=$ticket->description?></div>
+        <? if ($ticket->files->count): ?>
+            <h4>Attachments</h4>
+            <div class="attachments">
+                <?=$this->formRenderPartial('form_file_list', array('form_model'=>$ticket, 'form_field'=>$ticket->find_form_field('files'), 'dbName'=>'files', 'form_file_list'=>$ticket->files))?>
+            </div>
+        <? endif ?>
+    </div>
+
+    <? $this->renderPartial(PATH_APP.'/modules/ahoysupport/controllers/ahoysupport_tickets/_note_list.htm', array('ticket_id'=>$ticket->id)) ?>
+
+</div>

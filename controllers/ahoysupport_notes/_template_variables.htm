@@ -1,0 +1,34 @@
+<? $variables = Core_ModuleManager::listEmailVariables(null, true) ?>
+
+<?= Phpr_Form::openTag(array('id'=>null)) ?>
+    <div class="scrollable" id="variable_list">
+        <? foreach ($variables as $section=>$variables): ?>
+            <h4><?= h($section) ?></h4>
+        
+            <ul>
+                <? foreach ($variables as $variable=>$info):
+                    if ($variable == 'customer_password')
+                        continue;
+                ?>
+                    <li><a href="#" onclick="$(this).getForm().sendPhpr('create_onInsertVariable',{
+                            loadIndicator: {show: false},
+                            onBeforePost: LightLoadingIndicator.show.pass('Loading...'), 
+                            onComplete: LightLoadingIndicator.hide,
+                            extraFields: {'variable': '<?= h($variable) ?>'},
+                            onFailure: popupAjaxError,
+                            onSuccess: function(param1, param2, html_response){
+                                tinyMCE.execCommand('mceInsertContent', false, html_response);
+                            }
+                        }); return false">{<?= h($variable) ?>}</a> &ndash; <?= h($info[0]) ?></li>
+                <? endforeach ?>
+            </ul>
+        <? endforeach ?>
+    </div>
+</form>
+<script>
+    jQuery(document).ready(function($) { 
+        $(window).load(function() {
+            $('#variable_list').height(($('#sidebar_pages li:first').height()-30));
+        });
+    });
+</script>

@@ -1,0 +1,27 @@
+<div class="scoreboardReport">
+	<ul>
+		<li <? if (!$form_model->updated_at): ?>class="last"<? endif ?>>
+			<h3>Support Ticket</h3>
+			<p><?= h($form_model->title) ?></p>
+			<p class="description">
+				<? $post_page = Cms_Page::create()->find_by_action_reference('ahoysupport:ticket'); ?>
+				<? if($post_page): ?>
+					<? $address = Phpr::$request->getRootUrl().root_url($post_page->url.'/'.Core_String::normalizeUri($form_model->url_title)) ?>
+					url: <a href="<?= $address ?>" target="_blank"><?= $address ?></a>
+				<? else: ?>
+					&nbsp;
+				<? endif ?>
+			</p>
+		</li>
+		<? if ($form_model->updated_at): ?>
+		<li class="last">
+			<h3>Last update by</h3>
+			<p><?= h($form_model->updated_user_name) ?></p>
+			<p class="description">
+				at: <?= $form_model->displayField('updated_at') ?>
+			</p>
+		</li>
+		<? endif ?>
+	</ul>
+	<div class="clear"></div>
+</div>

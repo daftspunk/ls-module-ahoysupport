@@ -1,0 +1,85 @@
+<? Phpr_View::beginBlock("head") ?>
+	<script type="text/javascript" src="modules/ahoysupport/assets/javascript/edit.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/unload_manager.js"></script>
+
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery-ui-custom.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.event.drag-2.0.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.sizes.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.splitter.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.ui.fullheightlayout.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.ui.anchorlayout.js"></script>
+
+	<link rel="stylesheet" href="modules/ahoysupport/assets/css/ticket.css" type="text/css"/>
+
+	<script type="text/javascript">
+		UnloadManager.unload_message = 'The post has been changed. Unsaved data will be lost.';
+	</script>
+<? Phpr_View::endBlock() ?>
+<? Phpr_View::beginBlock("view") ?>
+
+	<?
+		$form_context = Phpr::$router->param('param1');
+		$ticket_id = Phpr::$router->param('param2');
+		$ticket = AhoySupport_Ticket::create()->find($ticket_id);
+	?>
+
+	<? if (!isset($fatalError)): ?>
+		<ul class="breadcrumbs">
+			<li><a href="<?= url('/ahoysupport/tickets') ?>">Support Tickets</a></li>
+			<li><a href="<?= url('/ahoysupport/tickets/preview/'.$ticket_id)."#comments" ?>">Ticket</a></li>
+			<li><?= $this->app_page_title ?></li>
+		</ul>
+
+		<h2 class="separated">Ticket #<?=$ticket->id?>: New Message <?=$form_context=="customer"?'on behalf of Customer':''?></h2>
+		<?
+			$panel_width = Phpr::$request->cookie('splitter-widget-splitter-table', null);
+			$left_panel_width = $panel_width ? $panel_width.'px' : null;
+		?>
+		<table class="layoutTable splitter" id="splitter-table">
+			<tr>
+				<td class="splitter-panel left-panel" style="width: <?= $left_panel_width ?>">
+
+				    <? if ($form_context=="customer" && $this->isHintVisible('ahoysupport_proxy_note')): ?>
+				        <?= Phpr_Form::openTag(array('id'=>'hint_form')) ?>
+				            <div class="hint">
+				                <p class="last">You are updating this ticket <strong>on behalf of the customer</strong> for the purpose of recording communication. If you have done this by mistake, 
+				                	<a href="<?=url('ahoysupport/notes/create/0/'.$ticket->id)?>">click here to update the ticket as you</a>.
+				                </p>
+				                <a title="Hide this hint" href="#" class="close" onclick="return hide_tip('ahoysupport_proxy_note', this)">Close</a>
+				            </div>
+				        </form>
+				    <? endif ?>
+
+					<?= Phpr_Form::openTag(array('id'=>'form_element')) ?>
+						<div class="toolbar">
+								<?= backend_ajax_button('Add Message', 'create_onSave', array(), "prepareFunction: function(){phprTriggerSave();}, onBeforeScriptEval: function(){UnloadManager.reset_changes()}") ?>
+								<?= backend_ajax_button('Cancel', 'create_onCancel', array(), "onBeforeScriptEval: function(){UnloadManager.reset_changes()}") ?>
+							<div class="clear"></div>
+						</div>
+						<? $this->formRender() ?>
+						<input type="hidden" name="context" value="<?=$form_context?>"/>
+						<input type="hidden" name="create_mode" value="1"/>
+						<input type="hidden" value="1" id="new_record_flag"/>
+						<input type="hidden" name="phpr_uploader_model_class" value="<?= get_class($form_model) ?>"/>
+
+						<h2 class="offsetTop separated">History</h2>
+						<div class="note_list_container_scroll">
+							<? $this->renderPartial(PATH_APP.'/modules/ahoysupport/controllers/ahoysupport_tickets/_ticket_note_summary.htm', array('ticket'=>$ticket)) ?>
+						</div>
+
+					</form>
+				</td>
+				<td class="splitter-separator"></td>
+				<td class="secondary_tabs splitter-panel right-panel" id="infoColumn">
+					<? $this->renderPartial('sidebar', array('ticket'=>$ticket)) ?>
+				</td>
+			</tr>
+		</table>
+
+
+	<? else: ?>
+		<?= flash() ?>
+
+		<p><a href="<?= url('/ahoysupport/tickets') ?>">Return to the ticket list</a></p>
+	<? endif ?>
+<? Phpr_View::endBlock() ?>

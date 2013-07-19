@@ -1,0 +1,22 @@
+<? Phpr_View::beginBlock("head") ?>
+    <script type="text/javascript" src="modules/ahoysupport/assets/javascript/support.js"></script>
+<? Phpr_View::endBlock() ?>
+<? Phpr_View::begin_block('view') ?>
+    <ul class="breadcrumbs">
+        <li><a href="<?= url('/system/settings') ?>">Settings</a></li>
+        <li><?= $this->app_page_title ?></li>
+    </ul>
+    <h2 class="offset-top-small">Support Settings</h2>
+
+    <? if(!isset($fatalError)): ?>
+        <div class="form-700">
+            <?= Phpr_Form::open_tag(array('id' => 'form_element')) ?>
+                <? $this->form_render($form_model) ?>
+
+                <?= backend_ajax_button('Save', 'index_onSave', array('class'=>'default'), "loadIndicator: {hideOnSuccess: true}, update: $(this).getForm().getElement('.formFlash')") ?>
+            <?= Phpr_Form::close_tag() ?>
+        </div>
+    <? else: ?>
+        <?= flash() ?>
+    <? endif ?>
+<? Phpr_View::end_block() ?>

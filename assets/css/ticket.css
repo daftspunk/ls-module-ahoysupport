@@ -1,0 +1,32 @@
+
+.note_list_container .description, 
+.note_list_container p, 
+.note_list_container li { font-size:13px; }
+.note_list_container .attachments { color:#666; }
+.note_list_container .attachments .hiddenLink { display:none; }
+
+.note_list_container .private_note { border:1px dashed #999; margin:1em; padding:1em 1em 0 1em; font-style:italic; }
+.note_list_container ul.note_changes { color:#333; margin:0; position:relative; top:-6px; }
+.note_list_container ul.note_changes li { padding:0.2em 0; }
+
+.note_list_container ul, 
+.note_list_container ol { margin-bottom:1em; }
+.note_list_container li { margin-left:2em; list-style-type: disc; }
+.note_list_container ol li { list-style-type: decimal; }
+
+.note_list_container .description { margin-bottom:1em; padding-left:1em; }
+.note_list_container .edit_note { float:right; position: relative; top:-15px; }
+
+.note_list_container .toolbar h4 { padding:0.4em;  float:left; margin-right:0.5em; }
+
+.note_list_container_scroll { height:300px; overflow:auto; border:5px solid #CCC; padding:1em; }
+
+
+.user_message { background: transparent url('../images/user_message.png') no-repeat 5px 4px; }
+.edit_message { background: transparent url('../images/edit_message.png') no-repeat 5px 4px; }
+.new_message_quick { background: transparent url('../images/new_message_quick.png') no-repeat 5px 4px; }
+.new_message { background: transparent url('../images/new_message.png') no-repeat 5px 4px; }
+.flag { background: transparent url('../images/normal.png') no-repeat 5px 4px; }
+.unflag { background: transparent url('../images/low.png') no-repeat 5px 4px; }
+.new_from_template { background: transparent url('../images/new_from_template.png') no-repeat 5px 4px; }
+.close_ticket { background: transparent url('../images/close.png') no-repeat 5px 4px; }

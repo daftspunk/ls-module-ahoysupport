@@ -1,0 +1,23 @@
+<?= Phpr_Form::openTag(array('id' => 'ticket_control_panel')) ?>
+    <div class="toolbar">
+        <?= backend_ctr_button('Refresh', 'refresh', array('href'=>'javascript:;', 'onclick'=>"return update_ticket_list()")) ?>
+        <div class="separator">&nbsp;</div>
+        <?= backend_ctr_button('Create ticket', 'new_document', url('/ahoysupport/tickets/create')) ?>
+        <div class="separator">&nbsp;</div>        
+        <? 
+            $members = AhoySupport_Helper::list_support_users();
+
+            $menu_items = array();
+            foreach ($members as $member)
+                $menu_items[h($member->firstName)] = array('href'=>'javascript:;', 'class'=>'user', 'onclick'=>'return set_assignee('.$member->id.')');
+        ?>
+
+        <?= Backend_Html::ctr_menuButton('Assign selected to ...  ', 'assign_to', $menu_items) ?>
+
+        <a class="imageLink apply" href="#" onclick="return close_tickets();">Close selected</a>
+        <div class="separator">&nbsp;</div>
+
+        <a class="imageLink delete_document" href="#" onclick="return delete_tickets();">Delete selected</a>        
+    	<div class="clear"></div>
+    </div>
+</form>

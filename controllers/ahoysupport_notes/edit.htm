@@ -1,0 +1,72 @@
+<? Phpr_View::beginBlock("head") ?>
+	<script type="text/javascript" src="modules/ahoysupport/assets/javascript/edit.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/unload_manager.js"></script>
+
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery-ui-custom.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.event.drag-2.0.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.sizes.min.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.splitter.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.ui.fullheightlayout.js"></script>
+	<script type="text/javascript" src="modules/backend/resources/javascript/jquery.ui.anchorlayout.js"></script>
+
+	<link rel="stylesheet" href="modules/ahoysupport/assets/css/ticket.css" type="text/css"/>
+
+	<script type="text/javascript">
+		UnloadManager.unload_message = 'The post has been changed. Unsaved data will be lost.';
+	</script>
+<? Phpr_View::endBlock() ?>
+<? Phpr_View::beginBlock("view") ?>
+	<? if (!isset($fatalError)): ?>
+		<ul class="breadcrumbs">
+			<li><a href="<?= url('/ahoysupport/tickets') ?>">Support Tickets</a></li>
+			<li><a href="<?= url('/ahoysupport/tickets/preview/'.$form_model->ticket_id) ?>">Ticket</a></li>
+			<li><?= $this->app_page_title ?></li>
+		</ul>
+
+		<h2 class="separated">Ticket #<?=$form_model->ticket->id?>: Edit Message</h2>
+
+
+		<? if (!($lock = Db_RecordLock::lock_exists($form_model))):
+			$panel_width = Phpr::$request->cookie('splitter-widget-splitter-table', null);
+			$left_panel_width = $panel_width ? $panel_width.'px' : null;
+		?>
+			<table class="layoutTable splitter" id="splitter-table">
+				<tr>
+					<td class="splitter-panel left-panel" style="width: <?= $left_panel_width ?>">
+						<?= Phpr_Form::openTag(array('id'=>'form_element')) ?>
+							<div class="toolbar">
+								<?= backend_ajax_button('<u>S</u>ave', 'edit_onSave', array(), "prepareFunction: function(){phprTriggerSave();}, loadIndicator: {show: false}, onBeforePost: LightLoadingIndicator.show('Saving...'), onComplete: LightLoadingIndicator.hide, onSuccess: function(){UnloadManager.reset_changes()}, onAfterUpdate: setupInfoSize, onAfterError: setupInfoSize, update: 'multi'") ?>
+								<?= backend_ajax_button('Cancel', 'edit_onCancel', array(), "onBeforeScriptEval: function(){UnloadManager.reset_changes()}") ?>
+
+								<?= backend_ajax_button('Delete', 'edit_onDelete', array('class'=>"right"), "confirm: 'Do you really want to delete this note?', onBeforeScriptEval: function(){UnloadManager.reset_changes()}") ?>
+								<div class="clear"></div>
+							</div>
+
+							<? $this->formRender() ?>
+						</form>
+
+						<h2 class="offsetTop separated">History</h2>
+						<div class="note_list_container_scroll">
+							<? $this->renderPartial(PATH_APP.'/modules/ahoysupport/controllers/ahoysupport_tickets/_ticket_note_summary.htm', array('ticket'=>$form_model->ticket)) ?>
+						</div>
+
+						<? $this->formAddLockCode() ?>
+					</td>
+					<td class="splitter-separator"></td>
+					<td class="secondary_tabs splitter-panel right-panel" id="infoColumn">
+						<? $this->renderPartial('sidebar', array('ticket'=>$form_model->ticket)) ?>
+					</td>
+				</tr>
+			</table>
+		<? else: ?>
+			<? $this->renderPartial(PATH_APP.'/modules/backend/controllers/partials/_record_locked.htm', array(
+				'record_name'=>'note',
+				'lock'=>$lock
+			)) ?>
+		<? endif ?>
+	<? else: ?>
+		<?= flash() ?>
+
+		<p><a href="<?= url('/ahoysupport/tickets') ?>">Return to the ticket list</a></p>
+	<? endif ?>
+<? Phpr_View::endBlock() ?>

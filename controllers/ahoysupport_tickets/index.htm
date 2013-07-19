@@ -1,0 +1,10 @@
+<? Phpr_View::beginBlock("head") ?>
+	<script type="text/javascript" src="modules/ahoysupport/assets/javascript/ticket_list.js"></script>
+    <link rel="stylesheet" href="modules/ahoysupport/assets/css/ticket_list.css" type="text/css"/>
+<? Phpr_View::endBlock() ?>
+
+<? Phpr_View::beginBlock("view") ?>
+	<div id="tickets_page_content">
+		<? $this->renderPartial('tickets_page_content') ?>
+	</div>
+<? Phpr_View::endBlock() ?>

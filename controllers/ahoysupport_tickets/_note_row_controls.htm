@@ -1,0 +1,17 @@
+<? if ($index == 0): ?>
+	<div class="row_controls hidden">
+		<div class="content">
+			<ul>
+				<li class="default">
+					<a href="<?= $url.'?'.uniqid() ?>">Preview</a>
+					<div class="handle"></div>
+				</li>
+				<li class="icon_edit">
+					<a href="<?= url('/ahoysupport/notes/edit/'.$model->id.'/'.$model->ticket_id).'?'.uniqid() ?>">Edit</a>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div id="note_<?= $model->id ?>"></div>
+<? endif ?>

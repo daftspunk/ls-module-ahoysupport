@@ -1,0 +1,32 @@
+<?= flash() ?>
+
+<div class="minorPadding">
+    <? $statistics = $this->get_ticket_statistics() ?>
+
+        <div class="scoreboardReport">
+            <ul>
+                <li>
+                    <h3>Total number of tickets</h3>
+                    <p><?= $statistics->total_count ?></p>
+                    <p class="description">
+                        Show all <a href="#" onclick="return $('FormElement').sendPhpr('index_onResetFilters', {loadIndicator: {show: false}});">(cancel filters)</a>
+                    </p>
+                </li>
+                <li class="last">
+                    <h3>Open tickets</h3>
+                    <p><?= $statistics->open_count ?></p>
+                    <p class="description">Total tickets: <?= $statistics->closed_count ?></p>
+                </li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+</div>
+
+<div class="no_toolbar_scroll">
+    <?
+        $list_options = array();
+        $list_options['list_control_panel'] = 'control_panel';
+        $list_options['list_render_filters'] = true;
+    ?>
+    <?= $this->listRender($list_options) ?>
+</div>

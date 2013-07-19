@@ -1,0 +1,8 @@
+
+<? $this->formRender($note) ?>
+<input type="hidden" name="ticket_id" value="<?=$ticket_id?>" />
+<input type="hidden" name="context" value="<?=$context?>" />
+
+<?= backend_ajax_button('Add message', 'preview_onCreateNote', array(), "prepareFunction: function(){phprTriggerSave();}, loadIndicator: {show: false}, update:'multi'") ?>
+<?= backend_button('Cancel', array('onclick'=>"jQuery('#ticket_add_note').html(''); return false")) ?>
+<div class="clear"></div><br />

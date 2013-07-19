@@ -1,0 +1,3 @@
+.no_toolbar_scroll div.scrollable_control_panel div.scroll_area  { overflow: visible; }
+div.toolbar .user { background: transparent url('../images/user.png') no-repeat 5px 4px; }
+div.toolbar .assign_to { background: transparent url('../images/group.png') no-repeat 5px 4px; }
